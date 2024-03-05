@@ -8,14 +8,9 @@ import dotenv from "dotenv";
 import ConnectDB from "./config/mongodb.mjs";
 dotenv.config();
 
-// Hr Middleware
 app.use(cors());
 app.use(express.json());
-
 app.use("/", router);
-
-// Hr Mongo Db
-
 ConnectDB();
 
 app.listen(port, () => {
