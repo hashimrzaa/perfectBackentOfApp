@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -16,19 +18,17 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+userSchema.pre("save", function (n) {
+  const salt = bcrypt.genSaltSync(10);
+  const hash = bcrypt.hashSync(this.password, salt);
+  this.password = hash;
+  n();
+});
 
+userSchema.method.comparePassword = function (pass) {
+  return bcrypt.compareSync(pass, this.password);
+};
 
 const Users = mongoose.model("users", userSchema);
 
 export default Users;
-// userSchema.pre("save", (n) => {
-//   const user = this;
-//   const salt = bcrypt.genSaltSync(10);
-//   const hash = bcrypt.hashSync(user.password, salt);
-//   n();
-// });
-
-// userSchema.method.comparePassword = (pass) => {
-//   const user = this;
-//   return bcrypt.compareSync(password, user.password);
-// };
