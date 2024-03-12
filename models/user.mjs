@@ -23,7 +23,7 @@ userSchema.pre("save", function (n) {
   const hash = bcrypt.hashSync(this.password, salt);
   this.password = hash;
   n();
-});
+}); 
 
 userSchema.method.comparePassword = function (pass) {
   return bcrypt.compareSync(pass, this.password);
